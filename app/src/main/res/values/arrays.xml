@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="units_array">
+        <item>Güvenlik</item>
+        <item>Sağlık</item>
+        <item>Teknik</item>
+        <item>Çevre</item>
+        <item>Öğrenci İşleri</item>
+        <item>Yönetim</item>
+    </string-array>
+</resources>
