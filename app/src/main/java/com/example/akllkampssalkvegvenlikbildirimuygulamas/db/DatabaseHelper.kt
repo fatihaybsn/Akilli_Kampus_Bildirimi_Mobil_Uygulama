@@ -1,12 +1,12 @@
-package com.example.campusguardian.db
+package com.example.akllkampssalkvegvenlikbildirimuygulamas.db
 
 import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import com.example.campusguardian.model.ReportStatus
-import com.example.campusguardian.model.ReportType
-import com.example.campusguardian.utils.HashUtils
+import com.example.akllkampssalkvegvenlikbildirimuygulamas.model.ReportStatus
+import com.example.akllkampssalkvegvenlikbildirimuygulamas.model.ReportType
+import com.example.akllkampssalkvegvenlikbildirimuygulamas.utils.HashUtils
 
 class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, DB_VERSION) {
 
@@ -169,7 +169,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DB_NAME, null
                 lon = 32.8540,
                 photoUri = null,
                 createdByUserId = user1Id,
-                unit = "Sağlık",
+                unit = ReportType.SECURITY.responsibleUnit,
                 createdAt = now - 2 * 60 * 60 * 1000L
             )
 
@@ -183,7 +183,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DB_NAME, null
                 lon = 32.8532,
                 photoUri = null,
                 createdByUserId = user2Id,
-                unit = "Teknik",
+                unit = ReportType.HEALTH.responsibleUnit,
                 createdAt = now - 5 * 60 * 60 * 1000L
             )
 
@@ -197,7 +197,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DB_NAME, null
                 lon = 32.8551,
                 photoUri = null,
                 createdByUserId = user3Id,
-                unit = "Çevre",
+                unit = ReportType.ENVIRONMENT.responsibleUnit,
                 createdAt = now - 26 * 60 * 60 * 1000L
             )
 
@@ -211,7 +211,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DB_NAME, null
                 lon = 32.8521,
                 photoUri = null,
                 createdByUserId = user2Id,
-                unit = "Teknik",
+                unit = ReportType.TECHNICAL.responsibleUnit,
                 createdAt = now - 40 * 60 * 1000L
             )
 
@@ -220,12 +220,12 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DB_NAME, null
                 type = ReportType.LOST_FOUND,
                 title = "Kayıp öğrenci kartı",
                 description = "Kampüs içi öğrenci kartı bulunursa güvenliğe teslim edilsin.",
-                status = ReportStatus.CLOSED_INVALID,
+                status = ReportStatus.RESOLVED,
                 lat = 39.9220,
                 lon = 32.8559,
                 photoUri = null,
                 createdByUserId = user1Id,
-                unit = "Sağlık",
+                unit = ReportType.LOST_FOUND.responsibleUnit,
                 createdAt = now - 3 * 24 * 60 * 60 * 1000L
             )
 

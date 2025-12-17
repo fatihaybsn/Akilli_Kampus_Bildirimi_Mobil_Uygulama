@@ -1,4 +1,4 @@
-package com.example.campusguardian.db
+package com.example.akllkampssalkvegvenlikbildirimuygulamas.db
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase

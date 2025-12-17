@@ -1,4 +1,4 @@
-package com.example.campusguardian.db
+package com.example.akllkampssalkvegvenlikbildirimuygulamas.db
 
 object DbSchema {
     const val DB_NAME = "campus_guardian.db"
