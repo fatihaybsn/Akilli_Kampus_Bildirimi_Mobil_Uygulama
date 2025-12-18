@@ -1,4 +1,4 @@
-package com.example.campusguardian.model
+package com.example.akllkampssalkvegvenlikbildirimuygulamas.model
 
 data class User(
     val id: Long,
@@ -14,14 +14,16 @@ data class Report(
     val type: String,   // HEALTH | SECURITY | ENVIRONMENT | LOST_FOUND | TECHNICAL
     val title: String,
     val description: String,
-    val status: String, // OPEN | IN_PROGRESS | RESOLVED | CLOSED_INVALID
+    val status: String, // OPEN | IN_PROGRESS | RESOLVED
     val lat: Double,
     val lon: Double,
     val photoUri: String?,
     val createdByUserId: Long,
     val unit: String,
     val createdAt: Long,
-    val updatedAt: Long
+    val updatedAt: Long,
+    val createdByName: String? = null,
+    val createdByEmail: String? = null
 )
 
 data class Announcement(
@@ -44,12 +46,12 @@ data class NotificationLog(
     val readAt: Long?
 )
 
-enum class ReportType(val dbValue: String, val labelTr: String) {
-    HEALTH("HEALTH", "Sağlık"),
-    SECURITY("SECURITY", "Güvenlik"),
-    ENVIRONMENT("ENVIRONMENT", "Çevre"),
-    LOST_FOUND("LOST_FOUND", "Kayıp / Buluntu"),
-    TECHNICAL("TECHNICAL", "Teknik");
+enum class ReportType(val dbValue: String, val labelTr: String, val responsibleUnit: String) {
+    HEALTH("HEALTH", "Sağlık", "Sağlık"),
+    SECURITY("SECURITY", "Güvenlik", "Güvenlik"),
+    ENVIRONMENT("ENVIRONMENT", "Çevre", "Çevre"),
+    LOST_FOUND("LOST_FOUND", "Kayıp / Buluntu", "Güvenlik"),
+    TECHNICAL("TECHNICAL", "Teknik", "Teknik");
 
     companion object {
         fun fromDb(v: String): ReportType {
@@ -61,12 +63,18 @@ enum class ReportType(val dbValue: String, val labelTr: String) {
 enum class ReportStatus(val dbValue: String, val labelTr: String) {
     OPEN("OPEN", "Açık"),
     IN_PROGRESS("IN_PROGRESS", "İnceleniyor"),
-    RESOLVED("RESOLVED", "Çözüldü"),
-    CLOSED_INVALID("CLOSED_INVALID", "Sonlandırıldı");
+    RESOLVED("RESOLVED", "Çözüldü");
 
     companion object {
         fun fromDb(v: String): ReportStatus {
-            return values().firstOrNull { it.dbValue == v } ?: OPEN
+            // Backward compatibility for older DB values
+            return when (v) {
+                "OPEN" -> OPEN
+                "IN_PROGRESS" -> IN_PROGRESS
+                "RESOLVED" -> RESOLVED
+                "CLOSED_INVALID" -> RESOLVED
+                else -> OPEN
+            }
         }
     }
 }
