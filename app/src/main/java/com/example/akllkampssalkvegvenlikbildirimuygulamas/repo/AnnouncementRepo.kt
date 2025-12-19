@@ -1,10 +1,10 @@
-package com.example.campusguardian.repo
+package com.example.akllkampssalkvegvenlikbildirimuygulamas.repo
 
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
-import com.example.campusguardian.db.DbProvider
-import com.example.campusguardian.model.Announcement
+import com.example.akllkampssalkvegvenlikbildirimuygulamas.db.DbProvider
+import com.example.akllkampssalkvegvenlikbildirimuygulamas.model.Announcement
 
 class AnnouncementRepo(private val context: Context) {
 

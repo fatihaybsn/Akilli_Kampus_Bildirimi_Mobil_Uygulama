@@ -1,13 +1,13 @@
-package com.example.campusguardian.repo
+package com.example.akllkampssalkvegvenlikbildirimuygulamas.repo
 
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteConstraintException
-import com.example.campusguardian.db.DbProvider
-import com.example.campusguardian.model.ReportType
-import com.example.campusguardian.model.User
-import com.example.campusguardian.utils.HashUtils
+import com.example.akllkampssalkvegvenlikbildirimuygulamas.db.DbProvider
+import com.example.akllkampssalkvegvenlikbildirimuygulamas.model.ReportType
+import com.example.akllkampssalkvegvenlikbildirimuygulamas.model.User
+import com.example.akllkampssalkvegvenlikbildirimuygulamas.utils.HashUtils
 
 class UserRepo(private val context: Context) {
 

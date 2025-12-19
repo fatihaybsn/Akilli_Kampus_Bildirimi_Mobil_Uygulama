@@ -1,8 +1,8 @@
-package com.example.campusguardian.repo
+package com.example.akllkampssalkvegvenlikbildirimuygulamas.repo
 
 import android.content.ContentValues
 import android.content.Context
-import com.example.campusguardian.db.DbProvider
+import com.example.akllkampssalkvegvenlikbildirimuygulamas.db.DbProvider
 
 class FollowRepo(private val context: Context) {
 
