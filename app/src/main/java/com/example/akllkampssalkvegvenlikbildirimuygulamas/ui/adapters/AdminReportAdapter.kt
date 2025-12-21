@@ -8,9 +8,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.akllkampssalkvegvenlikbildirimuygulamas.R
-import com.example.campusguardian.model.Report
-import com.example.campusguardian.utils.TimeUtils
-import com.example.campusguardian.utils.UiMappings
+import com.example.akllkampssalkvegvenlikbildirimuygulamas.model.Report
+import com.example.akllkampssalkvegvenlikbildirimuygulamas.model.ReportStatus
+import com.example.akllkampssalkvegvenlikbildirimuygulamas.utils.TimeUtils
+import com.example.akllkampssalkvegvenlikbildirimuygulamas.utils.UiMappings
 
 class AdminReportAdapter(
     private var list: List<Report>,
@@ -39,6 +40,9 @@ class AdminReportAdapter(
         private val ivType = itemView.findViewById<ImageView>(R.id.ivType)
         private val tvTitle = itemView.findViewById<TextView>(R.id.tvTitle)
         private val tvUnit = itemView.findViewById<TextView>(R.id.tvUnit)
+        private val tvCreator = itemView.findViewById<TextView>(R.id.tvCreator)
+        private val tvDesc = itemView.findViewById<TextView>(R.id.tvDesc)
+        private val tvLocation = itemView.findViewById<TextView>(R.id.tvLocation)
         private val tvTime = itemView.findViewById<TextView>(R.id.tvTime)
         private val tvStatus = itemView.findViewById<TextView>(R.id.tvStatus)
 
@@ -56,12 +60,29 @@ class AdminReportAdapter(
             ivType.setColorFilter(UiMappings.typeColor(r.type))
 
             tvTitle.text = r.title
-            tvUnit.text = "Unit: ${r.unit}"
+            tvUnit.text = "Birim: ${r.unit}"
+
+            val creator = when {
+                !r.createdByName.isNullOrBlank() && !r.createdByEmail.isNullOrBlank() -> "${r.createdByName} (${r.createdByEmail})"
+                !r.createdByName.isNullOrBlank() -> r.createdByName
+                !r.createdByEmail.isNullOrBlank() -> r.createdByEmail
+                else -> "Kullanıcı #${r.createdByUserId}"
+            }
+            tvCreator.text = "Bildiren: $creator"
+
+            tvDesc.text = r.description
+            tvLocation.text = "Konum: %.5f, %.5f".format(r.lat, r.lon)
+
             tvTime.text = TimeUtils.timeAgo(r.createdAt)
             tvStatus.text = UiMappings.statusLabel(r.status)
             tvStatus.setTextColor(UiMappings.statusColor(r.status))
 
             itemView.setOnClickListener { onOpenDetail(r) }
+
+            val status = ReportStatus.fromDb(r.status)
+            btnInProgress.isEnabled = status == ReportStatus.OPEN
+            btnResolved.isEnabled = status == ReportStatus.IN_PROGRESS
+            btnTerminate.isEnabled = status != ReportStatus.RESOLVED
 
             btnInProgress.setOnClickListener { onQuickStatus(r, "IN_PROGRESS") }
             btnResolved.setOnClickListener { onQuickStatus(r, "RESOLVED") }

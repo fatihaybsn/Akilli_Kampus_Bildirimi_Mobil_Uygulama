@@ -7,9 +7,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.akllkampssalkvegvenlikbildirimuygulamas.R
-import com.example.campusguardian.model.Report
-import com.example.campusguardian.utils.TimeUtils
-import com.example.campusguardian.utils.UiMappings
+import com.example.akllkampssalkvegvenlikbildirimuygulamas.model.Report
+import com.example.akllkampssalkvegvenlikbildirimuygulamas.utils.TimeUtils
+import com.example.akllkampssalkvegvenlikbildirimuygulamas.utils.UiMappings
 
 class ReportAdapter(
     private var list: List<Report>,

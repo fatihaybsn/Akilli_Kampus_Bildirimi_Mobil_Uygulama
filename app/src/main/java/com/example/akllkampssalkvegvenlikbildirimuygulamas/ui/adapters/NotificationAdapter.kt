@@ -7,8 +7,8 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.akllkampssalkvegvenlikbildirimuygulamas.R
-import com.example.campusguardian.model.NotificationLog
-import com.example.campusguardian.utils.TimeUtils
+import com.example.akllkampssalkvegvenlikbildirimuygulamas.model.NotificationLog
+import com.example.akllkampssalkvegvenlikbildirimuygulamas.utils.TimeUtils
 
 class NotificationAdapter(
     private var list: List<NotificationLog>,
