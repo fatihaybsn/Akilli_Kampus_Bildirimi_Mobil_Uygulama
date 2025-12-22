@@ -1,4 +1,4 @@
-package com.example.campusguardian.ui.report
+package com.example.akllkampssalkvegvenlikbildirimuygulamas.ui.report
 
 import android.Manifest
 import android.content.Intent
@@ -15,15 +15,17 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.example.akllkampssalkvegvenlikbildirimuygulamas.R
-import com.example.campusguardian.model.ReportType
-import com.example.campusguardian.repo.ReportRepo
-import com.example.campusguardian.session.SessionManager
-import com.example.campusguardian.utils.PermissionUtils
-import com.example.campusguardian.utils.SettingsManager
+import com.example.akllkampssalkvegvenlikbildirimuygulamas.model.ReportType
+import com.example.akllkampssalkvegvenlikbildirimuygulamas.repo.ReportRepo
+import com.example.akllkampssalkvegvenlikbildirimuygulamas.session.SessionManager
+import com.example.akllkampssalkvegvenlikbildirimuygulamas.utils.PermissionUtils
+import com.example.akllkampssalkvegvenlikbildirimuygulamas.utils.SettingsManager
 import com.google.android.material.textfield.TextInputEditText
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
+import org.osmdroid.events.MapEventsReceiver
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
+import org.osmdroid.views.overlay.MapEventsOverlay
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.gestures.RotationGestureOverlay
 
@@ -137,20 +139,27 @@ class CreateReportActivity : AppCompatActivity() {
             false
         }
 
-        // Tap to select point: use MapView's built-in events via Overlay not required; simplest is long click listener:
-        map.setOnLongClickListener {
-            val p = map.mapCenter as GeoPoint
-            setSelection(p.latitude, p.longitude, userInitiated = true)
-            true
-        }
+        // Map üzerinde seçim: uzun basılan noktanın koordinatını al
+        val eventsReceiver = object : MapEventsReceiver {
+            override fun singleTapConfirmedHelper(p: GeoPoint?): Boolean {
+                // tek dokunuşla seçim yapmayacağız
+                return false
+            }
 
+            override fun longPressHelper(p: GeoPoint?): Boolean {
+                if (p == null) return false
+                setSelection(p.latitude, p.longitude, userInitiated = true)
+                return true
+            }
+        }
+        map.overlays.add(MapEventsOverlay(eventsReceiver))
         progress.visibility = View.GONE
     }
 
     private fun setSelection(lat: Double, lon: Double, userInitiated: Boolean) {
         selectedLat = lat
         selectedLon = lon
-        tvLatLon.text = "Konum: %.6f, %.6f (Haritada seçmek için uzun bas -> merkez)".format(lat, lon)
+        tvLatLon.text = "Konum: %.6f, %.6f (Haritada seçmek için uzun bas)".format(lat, lon)
 
         if (marker == null) {
             marker = Marker(map).apply {

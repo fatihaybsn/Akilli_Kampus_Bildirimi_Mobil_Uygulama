@@ -12,12 +12,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import com.example.akllkampssalkvegvenlikbildirimuygulamas.R
-import com.example.campusguardian.session.SessionManager
+import com.example.akllkampssalkvegvenlikbildirimuygulamas.session.SessionManager
 import com.example.akllkampssalkvegvenlikbildirimuygulamas.ui.auth.LoginActivity
 import com.example.akllkampssalkvegvenlikbildirimuygulamas.ui.main.MapFragment
 import com.example.akllkampssalkvegvenlikbildirimuygulamas.ui.main.ProfileFragment
-import com.example.campusguardian.ui.report.CreateReportActivity
-import com.example.campusguardian.utils.PermissionUtils
+import com.example.akllkampssalkvegvenlikbildirimuygulamas.ui.report.CreateReportActivity
+import com.example.akllkampssalkvegvenlikbildirimuygulamas.utils.PermissionUtils
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 

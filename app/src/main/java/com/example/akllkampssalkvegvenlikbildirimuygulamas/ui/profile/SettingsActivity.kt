@@ -4,11 +4,11 @@ import android.os.Bundle
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.akllkampssalkvegvenlikbildirimuygulamas.R
-import com.example.campusguardian.model.ReportType
-import com.example.campusguardian.repo.UserPrefsRepo
-import com.example.campusguardian.session.SessionManager
-import com.example.campusguardian.utils.CampusBounds
-import com.example.campusguardian.utils.SettingsManager
+import com.example.akllkampssalkvegvenlikbildirimuygulamas.model.ReportType
+import com.example.akllkampssalkvegvenlikbildirimuygulamas.repo.UserPrefsRepo
+import com.example.akllkampssalkvegvenlikbildirimuygulamas.session.SessionManager
+import com.example.akllkampssalkvegvenlikbildirimuygulamas.utils.CampusBounds
+import com.example.akllkampssalkvegvenlikbildirimuygulamas.utils.SettingsManager
 
 class SettingsActivity : AppCompatActivity() {
 

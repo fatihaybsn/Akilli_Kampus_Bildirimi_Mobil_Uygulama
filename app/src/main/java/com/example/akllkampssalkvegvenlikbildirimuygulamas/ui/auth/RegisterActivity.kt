@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.akllkampssalkvegvenlikbildirimuygulamas.R
-import com.example.campusguardian.repo.UserRepo
+import com.example.akllkampssalkvegvenlikbildirimuygulamas.repo.UserRepo
 
 class RegisterActivity : AppCompatActivity() {
 

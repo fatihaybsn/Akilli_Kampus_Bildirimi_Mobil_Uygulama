@@ -1,4 +1,4 @@
-package com.example.campusguardian.ui.profile
+package com.example.akllkampssalkvegvenlikbildirimuygulamas.ui.profile
 
 import android.os.Bundle
 import android.view.View
@@ -9,8 +9,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.akllkampssalkvegvenlikbildirimuygulamas.R
-import com.example.campusguardian.repo.NotificationRepo
-import com.example.campusguardian.session.SessionManager
+import com.example.akllkampssalkvegvenlikbildirimuygulamas.repo.NotificationRepo
+import com.example.akllkampssalkvegvenlikbildirimuygulamas.session.SessionManager
 import com.example.akllkampssalkvegvenlikbildirimuygulamas.ui.adapters.NotificationAdapter
 
 class NotificationInboxActivity : AppCompatActivity() {

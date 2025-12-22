@@ -6,8 +6,8 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.akllkampssalkvegvenlikbildirimuygulamas.R
-import com.example.campusguardian.session.SessionManager
-import com.example.campusguardian.utils.NotificationEngine
+import com.example.akllkampssalkvegvenlikbildirimuygulamas.session.SessionManager
+import com.example.akllkampssalkvegvenlikbildirimuygulamas.utils.NotificationEngine
 
 class PublishAnnouncementActivity : AppCompatActivity() {
 

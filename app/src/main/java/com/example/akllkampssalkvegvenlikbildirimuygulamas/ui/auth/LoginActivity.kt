@@ -8,8 +8,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.akllkampssalkvegvenlikbildirimuygulamas.R
-import com.example.campusguardian.repo.UserRepo
-import com.example.campusguardian.session.SessionManager
+import com.example.akllkampssalkvegvenlikbildirimuygulamas.repo.UserRepo
+import com.example.akllkampssalkvegvenlikbildirimuygulamas.session.SessionManager
 import com.example.akllkampssalkvegvenlikbildirimuygulamas.ui.main.MainActivity
 
 class LoginActivity : AppCompatActivity() {
