@@ -5,19 +5,21 @@ import android.os.Bundle
 import android.view.*
 import android.widget.Button
 import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SwitchCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.akllkampssalkvegvenlikbildirimuygulamas.R
-import com.example.campusguardian.model.Report
-import com.example.campusguardian.repo.ReportRepo
-import com.example.campusguardian.session.SessionManager
+import com.example.akllkampssalkvegvenlikbildirimuygulamas.model.Report
+import com.example.akllkampssalkvegvenlikbildirimuygulamas.repo.ReportRepo
+import com.example.akllkampssalkvegvenlikbildirimuygulamas.session.SessionManager
 import com.example.akllkampssalkvegvenlikbildirimuygulamas.ui.adapters.AdminReportAdapter
 import com.example.akllkampssalkvegvenlikbildirimuygulamas.ui.admin.PublishAnnouncementActivity
 import com.example.akllkampssalkvegvenlikbildirimuygulamas.ui.report.ReportDetailActivity
-import com.example.campusguardian.utils.NotificationEngine
+import com.example.akllkampssalkvegvenlikbildirimuygulamas.utils.NotificationEngine
+import com.example.akllkampssalkvegvenlikbildirimuygulamas.utils.UiMappings
 
 class AdminReportsFragment : Fragment() {
 
@@ -42,7 +44,7 @@ class AdminReportsFragment : Fragment() {
 
         recycler.layoutManager = LinearLayoutManager(requireContext())
 
-        swUnitOnly.isChecked = true // default ON as required
+        swUnitOnly.isChecked = true // default ON
         swUnitOnly.setOnCheckedChangeListener { _, _ -> load() }
 
         btnEmergency.setOnClickListener {
@@ -59,10 +61,7 @@ class AdminReportsFragment : Fragment() {
 
     private fun load() {
         val user = SessionManager.requireUser(requireContext())
-        if (user.role != "ADMIN") {
-            // Hard guard
-            return
-        }
+        if (user.role != "ADMIN") return
 
         progress.visibility = View.VISIBLE
 
@@ -70,6 +69,7 @@ class AdminReportsFragment : Fragment() {
         val list = repo.listReports(
             ReportRepo.QueryParams(
                 sortDesc = true,
+                includeCreatorInfo = true,
                 adminUnitOnly = if (swUnitOnly.isChecked) user.unit else null
             )
         )
@@ -98,10 +98,14 @@ class AdminReportsFragment : Fragment() {
     }
 
     private fun doQuickStatusUpdate(report: Report, newStatus: String) {
+        if (!UiMappings.isValidStatusTransition(report.status, newStatus)) {
+            Toast.makeText(requireContext(), "Durum sırası geçersiz.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         val repo = ReportRepo(requireContext())
         val ok = repo.updateStatus(report.id, newStatus)
         if (ok) {
-            // Fetch fresh report for accurate title/type/unit
             val fresh = repo.getById(report.id)
             if (fresh != null) {
                 NotificationEngine.handleStatusChange(requireContext(), fresh, newStatus)
@@ -111,11 +115,30 @@ class AdminReportsFragment : Fragment() {
     }
 
     private fun confirmTerminate(report: Report) {
+        val input = android.widget.EditText(requireContext())
+        input.hint = "Kısa admin notu (opsiyonel)"
+        input.setText("Bildirim uygunsuz/yanlış olduğu için kapatıldı.")
+
         AlertDialog.Builder(requireContext())
             .setTitle("Sonlandır")
-            .setMessage("Bu bildirimi uygunsuz/yanlış olarak sonlandırmak istiyor musunuz?")
+            .setMessage("Bu bildirimi uygunsuz/yanlış olarak kapatmak istiyor musunuz? (Durum: Çözüldü)")
+            .setView(input)
             .setPositiveButton("Evet") { _, _ ->
-                doQuickStatusUpdate(report, "CLOSED_INVALID")
+                val note = input.text?.toString()?.trim().orEmpty().ifEmpty {
+                    "Bildirim uygunsuz/yanlış olduğu için kapatıldı."
+                }
+
+                val repo = ReportRepo(requireContext())
+                val ok = repo.closeAsInvalid(report.id, note)
+                if (ok) {
+                    val fresh = repo.getById(report.id)
+                    if (fresh != null) {
+                        NotificationEngine.handleStatusChange(requireContext(), fresh, "RESOLVED")
+                    }
+                    load()
+                } else {
+                    Toast.makeText(requireContext(), "İşlem başarısız.", Toast.LENGTH_SHORT).show()
+                }
             }
             .setNegativeButton("İptal", null)
             .show()
