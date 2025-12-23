@@ -1,4 +1,4 @@
-package com.example.campusguardian.utils
+package com.example.akllkampssalkvegvenlikbildirimuygulamas.utils
 
 import java.text.SimpleDateFormat
 import java.util.Date

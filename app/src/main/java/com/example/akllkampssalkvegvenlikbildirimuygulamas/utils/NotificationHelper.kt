@@ -9,7 +9,7 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.example.akllkampssalkvegvenlikbildirimuygulamas.R
 import com.example.akllkampssalkvegvenlikbildirimuygulamas.ui.main.MainActivity
-import com.example.campusguardian.utils.PermissionUtils
+import com.example.akllkampssalkvegvenlikbildirimuygulamas.utils.PermissionUtils
 
 object NotificationHelper {
 

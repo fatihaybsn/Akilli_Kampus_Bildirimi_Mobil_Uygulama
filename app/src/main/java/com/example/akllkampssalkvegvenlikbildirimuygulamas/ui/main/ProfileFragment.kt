@@ -8,10 +8,10 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import com.example.akllkampssalkvegvenlikbildirimuygulamas.R
-import com.example.campusguardian.session.SessionManager
+import com.example.akllkampssalkvegvenlikbildirimuygulamas.session.SessionManager
 import com.example.akllkampssalkvegvenlikbildirimuygulamas.ui.auth.LoginActivity
 import com.example.akllkampssalkvegvenlikbildirimuygulamas.ui.profile.FollowedReportsActivity
-import com.example.campusguardian.ui.profile.NotificationInboxActivity
+import com.example.akllkampssalkvegvenlikbildirimuygulamas.ui.profile.NotificationInboxActivity
 import com.example.akllkampssalkvegvenlikbildirimuygulamas.ui.profile.SettingsActivity
 
 class ProfileFragment : Fragment() {

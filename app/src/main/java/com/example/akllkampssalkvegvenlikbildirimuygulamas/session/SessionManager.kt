@@ -1,8 +1,8 @@
-package com.example.campusguardian.session
+package com.example.akllkampssalkvegvenlikbildirimuygulamas.session
 
 import android.content.Context
-import com.example.campusguardian.model.User
-import com.example.campusguardian.repo.UserRepo
+import com.example.akllkampssalkvegvenlikbildirimuygulamas.model.User
+import com.example.akllkampssalkvegvenlikbildirimuygulamas.repo.UserRepo
 
 object SessionManager {
     private const val PREF = "session"

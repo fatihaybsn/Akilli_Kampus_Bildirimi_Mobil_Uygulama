@@ -1,4 +1,4 @@
-package com.example.campusguardian.utils
+package com.example.akllkampssalkvegvenlikbildirimuygulamas.utils
 
 import android.content.Context
 

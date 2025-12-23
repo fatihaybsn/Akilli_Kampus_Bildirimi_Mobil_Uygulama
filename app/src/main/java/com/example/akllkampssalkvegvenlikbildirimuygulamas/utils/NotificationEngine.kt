@@ -1,15 +1,15 @@
-package com.example.campusguardian.utils
+package com.example.akllkampssalkvegvenlikbildirimuygulamas.utils
 
 import android.content.Context
 import com.example.akllkampssalkvegvenlikbildirimuygulamas.utils.NotificationHelper
-import com.example.campusguardian.model.NotificationKind
-import com.example.campusguardian.model.Report
-import com.example.campusguardian.repo.AnnouncementRepo
-import com.example.campusguardian.repo.FollowRepo
-import com.example.campusguardian.repo.NotificationRepo
-import com.example.campusguardian.repo.UserPrefsRepo
-import com.example.campusguardian.repo.UserRepo
-import com.example.campusguardian.session.SessionManager
+import com.example.akllkampssalkvegvenlikbildirimuygulamas.model.NotificationKind
+import com.example.akllkampssalkvegvenlikbildirimuygulamas.model.Report
+import com.example.akllkampssalkvegvenlikbildirimuygulamas.repo.AnnouncementRepo
+import com.example.akllkampssalkvegvenlikbildirimuygulamas.repo.FollowRepo
+import com.example.akllkampssalkvegvenlikbildirimuygulamas.repo.NotificationRepo
+import com.example.akllkampssalkvegvenlikbildirimuygulamas.repo.UserPrefsRepo
+import com.example.akllkampssalkvegvenlikbildirimuygulamas.repo.UserRepo
+import com.example.akllkampssalkvegvenlikbildirimuygulamas.session.SessionManager
 
 object NotificationEngine {
 

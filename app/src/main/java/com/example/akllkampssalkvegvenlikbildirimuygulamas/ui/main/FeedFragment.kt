@@ -11,9 +11,9 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.akllkampssalkvegvenlikbildirimuygulamas.R
-import com.example.campusguardian.model.ReportType
-import com.example.campusguardian.repo.ReportRepo
-import com.example.campusguardian.session.SessionManager
+import com.example.akllkampssalkvegvenlikbildirimuygulamas.model.ReportType
+import com.example.akllkampssalkvegvenlikbildirimuygulamas.repo.ReportRepo
+import com.example.akllkampssalkvegvenlikbildirimuygulamas.session.SessionManager
 import com.example.akllkampssalkvegvenlikbildirimuygulamas.ui.adapters.ReportAdapter
 import com.example.akllkampssalkvegvenlikbildirimuygulamas.ui.report.ReportDetailActivity
 

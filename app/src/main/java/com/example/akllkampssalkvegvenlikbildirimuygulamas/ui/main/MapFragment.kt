@@ -7,10 +7,10 @@ import android.widget.ProgressBar
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.akllkampssalkvegvenlikbildirimuygulamas.R
-import com.example.campusguardian.repo.ReportRepo
+import com.example.akllkampssalkvegvenlikbildirimuygulamas.repo.ReportRepo
 import com.example.akllkampssalkvegvenlikbildirimuygulamas.ui.map.ReportMarkerInfoWindow
 import com.example.akllkampssalkvegvenlikbildirimuygulamas.ui.report.ReportDetailActivity
-import com.example.campusguardian.utils.UiMappings
+import com.example.akllkampssalkvegvenlikbildirimuygulamas.utils.UiMappings
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
