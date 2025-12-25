@@ -6,14 +6,14 @@ import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.akllkampssalkvegvenlikbildirimuygulamas.R
-import com.example.campusguardian.model.Report
-import com.example.campusguardian.model.ReportStatus
-import com.example.campusguardian.repo.FollowRepo
-import com.example.campusguardian.repo.ReportRepo
-import com.example.campusguardian.session.SessionManager
-import com.example.campusguardian.utils.NotificationEngine
-import com.example.campusguardian.utils.TimeUtils
-import com.example.campusguardian.utils.UiMappings
+import com.example.akllkampssalkvegvenlikbildirimuygulamas.model.Report
+import com.example.akllkampssalkvegvenlikbildirimuygulamas.model.ReportStatus
+import com.example.akllkampssalkvegvenlikbildirimuygulamas.repo.FollowRepo
+import com.example.akllkampssalkvegvenlikbildirimuygulamas.repo.ReportRepo
+import com.example.akllkampssalkvegvenlikbildirimuygulamas.session.SessionManager
+import com.example.akllkampssalkvegvenlikbildirimuygulamas.utils.NotificationEngine
+import com.example.akllkampssalkvegvenlikbildirimuygulamas.utils.TimeUtils
+import com.example.akllkampssalkvegvenlikbildirimuygulamas.utils.UiMappings
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
@@ -28,6 +28,7 @@ class ReportDetailActivity : AppCompatActivity() {
     private lateinit var tvStatus: TextView
     private lateinit var tvTime: TextView
     private lateinit var tvUnit: TextView
+    private lateinit var tvCreator: TextView
     private lateinit var tvDesc: TextView
 
     private lateinit var ivPhoto: ImageView
@@ -44,6 +45,7 @@ class ReportDetailActivity : AppCompatActivity() {
     private lateinit var btnTerminate: Button
 
     private var report: Report? = null
+    private var spinnerOptions: List<ReportStatus> = emptyList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,6 +62,7 @@ class ReportDetailActivity : AppCompatActivity() {
         tvStatus = findViewById(R.id.tvStatus)
         tvTime = findViewById(R.id.tvTime)
         tvUnit = findViewById(R.id.tvUnit)
+        tvCreator = findViewById(R.id.tvCreator)
         tvDesc = findViewById(R.id.tvDesc)
 
         ivPhoto = findViewById(R.id.ivPhoto)
@@ -75,15 +78,12 @@ class ReportDetailActivity : AppCompatActivity() {
         btnTerminate = findViewById(R.id.btnTerminate)
 
         setupMap()
-        setupAdminStatusSpinner()
 
         val user = SessionManager.requireUser(this)
         adminPanel.visibility = if (user.role == "ADMIN") View.VISIBLE else View.GONE
-
         btnFollow.visibility = if (user.role == "USER") View.VISIBLE else View.GONE
 
         btnFollow.setOnClickListener { toggleFollow() }
-
         btnSaveStatus.setOnClickListener { saveStatus() }
         btnSaveDesc.setOnClickListener { saveDescription() }
         btnTerminate.setOnClickListener { confirmTerminate() }
@@ -106,11 +106,20 @@ class ReportDetailActivity : AppCompatActivity() {
         map.controller.setZoom(17.0)
     }
 
-    private fun setupAdminStatusSpinner() {
-        val labels = ReportStatus.values().map { it.labelTr }
+    private fun setStatusSpinnerOptions(currentStatusDb: String) {
+        val current = ReportStatus.fromDb(currentStatusDb)
+
+        spinnerOptions = when (current) {
+            ReportStatus.OPEN -> listOf(ReportStatus.OPEN, ReportStatus.IN_PROGRESS)
+            ReportStatus.IN_PROGRESS -> listOf(ReportStatus.IN_PROGRESS, ReportStatus.RESOLVED)
+            ReportStatus.RESOLVED -> listOf(ReportStatus.RESOLVED)
+        }
+
+        val labels = spinnerOptions.map { it.labelTr }
         val ad = ArrayAdapter(this, android.R.layout.simple_spinner_item, labels)
         ad.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spStatus.adapter = ad
+        spStatus.setSelection(0)
     }
 
     private fun load() {
@@ -124,7 +133,16 @@ class ReportDetailActivity : AppCompatActivity() {
         tvType.text = "Tür: ${UiMappings.typeLabel(r.type)}"
         tvStatus.text = "Durum: ${UiMappings.statusLabel(r.status)}"
         tvTime.text = "Zaman: ${TimeUtils.formatDateTime(r.createdAt)} (${TimeUtils.timeAgo(r.createdAt)})"
-        tvUnit.text = "Unit: ${r.unit}"
+        tvUnit.text = "Birim: ${r.unit}"
+
+        val creator = when {
+            !r.createdByName.isNullOrBlank() && !r.createdByEmail.isNullOrBlank() -> "${r.createdByName} (${r.createdByEmail})"
+            !r.createdByName.isNullOrBlank() -> r.createdByName
+            !r.createdByEmail.isNullOrBlank() -> r.createdByEmail
+            else -> "Kullanıcı #${r.createdByUserId}"
+        }
+        tvCreator.text = "Bildiren: $creator"
+
         tvDesc.text = r.description
 
         if (!r.photoUri.isNullOrBlank()) {
@@ -153,10 +171,14 @@ class ReportDetailActivity : AppCompatActivity() {
         if (user.role == "USER") {
             updateFollowButton()
         } else {
-            // admin: set current status selection, description edit
-            val st = ReportStatus.fromDb(r.status)
-            spStatus.setSelection(st.ordinal)
+            setStatusSpinnerOptions(r.status)
             etDescEdit.setText(r.description)
+
+            val current = ReportStatus.fromDb(r.status)
+            val locked = (current == ReportStatus.RESOLVED)
+            spStatus.isEnabled = !locked
+            btnSaveStatus.isEnabled = !locked
+            btnTerminate.isEnabled = !locked
         }
     }
 
@@ -182,8 +204,15 @@ class ReportDetailActivity : AppCompatActivity() {
         if (user.role != "ADMIN") return
 
         val r = report ?: return
+
         val selectedLabel = spStatus.selectedItem?.toString().orEmpty()
-        val newStatus = ReportStatus.values().firstOrNull { it.labelTr == selectedLabel }?.dbValue ?: r.status
+        val selected = spinnerOptions.firstOrNull { it.labelTr == selectedLabel } ?: return
+        val newStatus = selected.dbValue
+
+        if (!UiMappings.isValidStatusTransition(r.status, newStatus)) {
+            Toast.makeText(this, "Durum sırası geçersiz. Önce 'İnceleniyor', sonra 'Çözüldü'.", Toast.LENGTH_SHORT).show()
+            return
+        }
 
         val ok = ReportRepo(this).updateStatus(reportId, newStatus)
         if (ok) {
@@ -217,18 +246,30 @@ class ReportDetailActivity : AppCompatActivity() {
         val user = SessionManager.requireUser(this)
         if (user.role != "ADMIN") return
 
+        val input = EditText(this)
+        input.hint = "Kısa admin notu (opsiyonel)"
+        input.setText("Bildirim uygunsuz/yanlış olduğu için kapatıldı.")
+
         AlertDialog.Builder(this)
             .setTitle("Sonlandır")
-            .setMessage("Bu bildirimi 'Sonlandırıldı' durumuyla kapatmak istiyor musunuz?")
+            .setMessage("Bu bildirimi uygunsuz/yanlış olarak kapatmak istiyor musunuz? (Durum: Çözüldü)")
+            .setView(input)
             .setPositiveButton("Evet") { _, _ ->
-                val ok = ReportRepo(this).updateStatus(reportId, "CLOSED_INVALID")
+                val note = input.text?.toString()?.trim().orEmpty().ifEmpty {
+                    "Bildirim uygunsuz/yanlış olduğu için kapatıldı."
+                }
+
+                val repo = ReportRepo(this)
+                val ok = repo.closeAsInvalid(reportId, note)
                 if (ok) {
-                    val fresh = ReportRepo(this).getById(reportId)
+                    val fresh = repo.getById(reportId)
                     if (fresh != null) {
-                        NotificationEngine.handleStatusChange(this, fresh, "CLOSED_INVALID")
+                        NotificationEngine.handleStatusChange(this, fresh, "RESOLVED")
                     }
-                    Toast.makeText(this, "Bildirim sonlandırıldı.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Bildirim kapatıldı.", Toast.LENGTH_SHORT).show()
                     load()
+                } else {
+                    Toast.makeText(this, "İşlem başarısız.", Toast.LENGTH_SHORT).show()
                 }
             }
             .setNegativeButton("İptal", null)
