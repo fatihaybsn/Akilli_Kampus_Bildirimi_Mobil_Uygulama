@@ -1,13 +1,29 @@
-package com.example.campusguardian.utils
+package com.example.akllkampssalkvegvenlikbildirimuygulamas.utils
 
 import android.graphics.Color
-import com.example.campusguardian.model.ReportStatus
-import com.example.campusguardian.model.ReportType
+import com.example.akllkampssalkvegvenlikbildirimuygulamas.model.ReportStatus
+import com.example.akllkampssalkvegvenlikbildirimuygulamas.model.ReportType
 
 object UiMappings {
 
     fun typeLabel(typeDb: String): String = ReportType.fromDb(typeDb).labelTr
     fun statusLabel(statusDb: String): String = ReportStatus.fromDb(statusDb).labelTr
+
+    fun responsibleUnit(typeDb: String): String = ReportType.fromDb(typeDb).responsibleUnit
+
+    fun isValidStatusTransition(currentStatusDb: String, newStatusDb: String): Boolean {
+        val current = ReportStatus.fromDb(currentStatusDb)
+        val next = ReportStatus.fromDb(newStatusDb)
+
+        // No-op always allowed
+        if (current == next) return true
+
+        return when (current) {
+            ReportStatus.OPEN -> next == ReportStatus.IN_PROGRESS
+            ReportStatus.IN_PROGRESS -> next == ReportStatus.RESOLVED
+            ReportStatus.RESOLVED -> false
+        }
+    }
 
     fun typeIconRes(typeDb: String): Int {
         return when (ReportType.fromDb(typeDb)) {
@@ -24,7 +40,6 @@ object UiMappings {
             ReportStatus.OPEN -> android.R.drawable.presence_away
             ReportStatus.IN_PROGRESS -> android.R.drawable.presence_busy
             ReportStatus.RESOLVED -> android.R.drawable.presence_online
-            ReportStatus.CLOSED_INVALID -> android.R.drawable.presence_offline
         }
     }
 
@@ -43,7 +58,6 @@ object UiMappings {
             ReportStatus.OPEN -> Color.parseColor("#D32F2F")
             ReportStatus.IN_PROGRESS -> Color.parseColor("#F9A825")
             ReportStatus.RESOLVED -> Color.parseColor("#2E7D32")
-            ReportStatus.CLOSED_INVALID -> Color.parseColor("#616161")
         }
     }
 }
