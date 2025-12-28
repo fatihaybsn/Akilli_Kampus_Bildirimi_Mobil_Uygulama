@@ -43,6 +43,28 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp"/>
 
+                <TextView
+                    android:id="@+id/tvCreator"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"/>
+
+                <TextView
+                    android:id="@+id/tvDesc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:maxLines="2"
+                    android:ellipsize="end"/>
+
+                <TextView
+                    android:id="@+id/tvLocation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:textSize="12sp"/>
+            
+
                 <LinearLayout
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
